@@ -13,8 +13,12 @@ repositories {
 }
 
 dependencies {
-	implementation 'org.springframework.boot:spring-boot-starter'
+	implementation 'org.springframework.boot:spring-boot-starter-web'
+implementation 'org.springframework.boot:spring-boot-starter-data-jpa:2.7.4'
+	//spring data jpa
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
+implementation 'mysql:mysql-connector-java:8.0.31'
+	//mysql
 }
 
 tasks.named('test') {
