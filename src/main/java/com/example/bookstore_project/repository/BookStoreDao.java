@@ -14,4 +14,10 @@ public interface BookStoreDao extends JpaRepository<BookStore, String>{
 	
 	public List<BookStore> findTop5ByOrderBySalesDesc();
 	
+	public List<BookStore> findByName(String name);
+	
+	public List<BookStore> findByWriter(String writer);
+	
+	
+	
 }

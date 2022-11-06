@@ -10,8 +10,10 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.example.bookstore_project.service.ifs.BookStoreService;
 import com.example.bookstore_project.constans.BookStoreRtnCode;
-import com.example.bookstore_project.entity.BookStore;
 import com.example.bookstore_project.vo.BookStoreRes;
+import com.example.bookstore_project.vo.SerchBooksReq;
+import com.example.bookstore_project.vo.UpdatePriceReq;
+import com.example.bookstore_project.vo.UpdateStorageReq;
 import com.example.bookstore_project.vo.orderBookReq;
 import com.example.bookstore_project.vo.BookRankRes;
 import com.example.bookstore_project.vo.BookStoreReq;
@@ -100,8 +102,27 @@ private BookStoreRes checkreq(BookStoreReq req) {
 	
 	@PostMapping(value = "/api/buybooks")
 	public BookStoreRes buyBooks(@RequestBody orderBookReq req) {
-		
 		return bookstoreservice.buyBooks(req.getOrderList());
+	}
+	
+	@PostMapping(value = "/api/serchBooksByIdOrNameOrWriter")
+	public BookStoreRes searchBooks(@RequestBody SerchBooksReq req) {
+		if(!StringUtils.hasText(req.getIdornameorwriter())) {
+			return new BookStoreRes(null,BookStoreRtnCode.ID_NAME_WRITER_REQUIRED.getMessage());
+		}
+		return bookstoreservice.searchBooks(req.getCode(),req.getIdornameorwriter());
+	}
+	
+	@PostMapping(value = "/api/updateStorage")
+	public BookStoreRes updateStorage(@RequestBody UpdateStorageReq req) {
+		
+		return bookstoreservice.updateStorage(req.getCode(), req.getId(), req.getnum());
+	}
+	
+	@PostMapping(value = "/api/updatePrice")
+	public BookStoreRes updatePrice(@RequestBody UpdatePriceReq req) {
+		return bookstoreservice.updatePrice(req.getCode(),  req.getId(), req.getPrice());
+		
 	}
 
 }
