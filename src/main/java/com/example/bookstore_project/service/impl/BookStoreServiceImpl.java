@@ -12,8 +12,9 @@ import org.springframework.stereotype.Service;
 
 import com.example.bookstore_project.service.ifs.BookStoreService;
 import com.example.bookstore_project.vo.BookRankRes;
+import com.example.bookstore_project.vo.BookStoreReq;
 import com.example.bookstore_project.vo.BookStoreRes;
-import com.example.bookstore_project.vo.OrderBookRes;
+import com.example.bookstore_project.vo.orderBookReq;
 import com.example.bookstore_project.constans.BookStoreRtnCode;
 import com.example.bookstore_project.entity.BookStore;
 import com.example.bookstore_project.repository.BookStoreDao;
@@ -94,28 +95,39 @@ public class BookStoreServiceImpl implements BookStoreService{
 }
 
 	@Override
-	public BookStoreRes buyBooks(Map<String,Integer>orderlist) {
-		if(orderlist.isEmpty()){
-			return new BookStoreRes(null,BookStoreRtnCode.ID_REQUIRED.getMessage());
-		}
+	public BookStoreRes buyBooks(List<orderBookReq>orderList) {
+		
 		int price;
-		for (Map.Entry<String,Integer> entry : orderlist.entrySet()) {
-			
-			Optional<BookStore> book = bookStoredao.findById(entry.getKey());
-			
-			if(book.isPresent() && entry.getValue()> 0) {
-				
-				book.get().setSales(book.get().getSales()+ 1);
-				book.get().setStorage(book.get().getStorage()-1);
-				
-				
-				OrderBookRes res = new OrderBookRes();
-				price = book.get().getPrice() * entry.getValue();
-				res.setId(book.get().getId());
-				res.setName(book.get().getName());
-				res.setPrice(price);
+		int totalprice = 0;
+		BookStoreRes messageList = new BookStoreRes();
+		List<String>buy = new ArrayList<>();
+		buy.add("購買明細:");
+		messageList.setMessagelist(buy);
+		for (orderBookReq entry : orderList) {
+			if(entry.getId().isEmpty()){
+				return new BookStoreRes(null,BookStoreRtnCode.ID_REQUIRED.getMessage());
 			}
+			else if(entry.getNum()< 0){
+				return new BookStoreRes(null,BookStoreRtnCode.NUM_REQUIRED.getMessage());
+			}
+		    if (bookStoredao.findById(entry.getId()).isPresent()) {
+		    	Optional<BookStore> book = bookStoredao.findById(entry.getId());
+			
+				book.get().setSales(book.get().getSales()+ entry.getNum());
+				book.get().setStorage(book.get().getStorage()- entry.getNum());
+				bookStoredao.save(book.get());
+				
+				price = book.get().getPrice() * entry.getNum();
+				totalprice += price;
+				messageList.messagelist.add("書籍id:" + book.get().getId()+ " 書籍名稱:"+book.get().getName()
+						+" 購買數量:"+entry.getNum()+ " 小計:"+ price);
+		    }
+		    else{
+		    	messageList.messagelist.add(BookStoreRtnCode.ID_REQUIRED.getMessage()+ entry.getId());
+			}
+			
 		}
-		return null;
+		messageList.messagelist.add("總金額:"+totalprice);
+		return messageList;
 	}
 }

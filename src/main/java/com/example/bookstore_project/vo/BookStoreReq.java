@@ -1,6 +1,7 @@
 package com.example.bookstore_project.vo;
 
 import java.util.List;
+import java.util.Map;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
@@ -27,7 +28,10 @@ public class BookStoreReq {
 	@JsonProperty("storage")
 	private Integer storage;
 	
-	List<String>list;
+	private Integer num;
+	
+	List<BookStoreReq>orderlist;
+	
 
 	public String getId() {
 		return id;
@@ -85,16 +89,24 @@ public class BookStoreReq {
 		this.storage = storage;
 	}
 
-	public List<String> getList() {
-		return list;
-	}
-
-	public void setList(List<String> list) {
-		this.list = list;
-	}
-
 	public void setSales_volume(int sales_volume) {
 		this.sales_volume = sales_volume;
+	}
+
+	public List<BookStoreReq> getOrderlist() {
+		return orderlist;
+	}
+
+	public void setOrderlist(List<BookStoreReq> orderlist) {
+		this.orderlist = orderlist;
+	}
+
+	public Integer getNum() {
+		return num;
+	}
+
+	public void setNum(Integer num) {
+		this.num = num;
 	}
 
 	

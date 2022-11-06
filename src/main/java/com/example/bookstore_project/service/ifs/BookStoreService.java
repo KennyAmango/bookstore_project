@@ -1,11 +1,13 @@
 package com.example.bookstore_project.service.ifs;
 
 import java.util.List;
-import java.util.Map;
+
 
 import com.example.bookstore_project.entity.BookStore;
 import com.example.bookstore_project.vo.BookRankRes;
+import com.example.bookstore_project.vo.BookStoreReq;
 import com.example.bookstore_project.vo.BookStoreRes;
+import com.example.bookstore_project.vo.orderBookReq;
 
 public interface BookStoreService {
 	
@@ -21,6 +23,6 @@ public interface BookStoreService {
 	
 	public List<BookRankRes> bookrank();
 	
-	public BookStoreRes buyBooks(Map<String,Integer>orderlist);
+	public BookStoreRes buyBooks(List<orderBookReq>orderlist);
 
 }

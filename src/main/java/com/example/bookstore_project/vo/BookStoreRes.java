@@ -28,11 +28,18 @@ public class BookStoreRes {
 	
 	private String message;
 	
+    private Integer num;
+	
+	private Integer totalprice;
+	
 	public BookStoreRes () {
 		
 	}
+	public List<String>messagelist;
 	
 	public List<BookStore>booklist;
+	
+	public List<BookStoreRes>booksInfo;
 	
 	public BookStoreRes(String message) {
 		this.message = message;
@@ -107,6 +114,38 @@ public class BookStoreRes {
 
 	public void setBooklist(List<BookStore> booklist) {
 		this.booklist = booklist;
+	}
+
+	public Integer getNum() {
+		return num;
+	}
+
+	public void setNum(Integer num) {
+		this.num = num;
+	}
+
+	public Integer getTotalprice() {
+		return totalprice;
+	}
+
+	public void setTotalprice(Integer totalprice) {
+		this.totalprice = totalprice;
+	}
+
+	public List<BookStoreRes> getBooksInfo() {
+		return booksInfo;
+	}
+
+	public void setBooksInfo(List<BookStoreRes> booksInfo) {
+		this.booksInfo = booksInfo;
+	}
+
+	public List<String> getMessagelist() {
+		return messagelist;
+	}
+
+	public void setMessagelist(List<String> messagelist) {
+		this.messagelist = messagelist;
 	}
 
 	

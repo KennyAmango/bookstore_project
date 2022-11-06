@@ -12,6 +12,7 @@ import com.example.bookstore_project.service.ifs.BookStoreService;
 import com.example.bookstore_project.constans.BookStoreRtnCode;
 import com.example.bookstore_project.entity.BookStore;
 import com.example.bookstore_project.vo.BookStoreRes;
+import com.example.bookstore_project.vo.orderBookReq;
 import com.example.bookstore_project.vo.BookRankRes;
 import com.example.bookstore_project.vo.BookStoreReq;
 
@@ -98,9 +99,9 @@ private BookStoreRes checkreq(BookStoreReq req) {
 	}
 	
 	@PostMapping(value = "/api/buybooks")
-	public BookStoreRes buyBooks(@RequestBody BookStoreReq req) {
-		return null;
+	public BookStoreRes buyBooks(@RequestBody orderBookReq req) {
 		
+		return bookstoreservice.buyBooks(req.getOrderList());
 	}
 
 }
