@@ -57,7 +57,15 @@ public class BookStoreServiceImpl implements BookStoreService{
 	}
 
 	@Override
-	public List<BookStore> findByCategory(String category) {
+	public BookStoreRes findByCategory(String category) {
+		if(!StringUtils.hasText(category)) {
+			return new BookStoreRes(null,BookStoreRtnCode.CATEGORY_REQUIRED.getMessage());
+		}
+		BookStoreRes messageList = new BookStoreRes();
+		List<String> title = new ArrayList<>();
+		title.add("搜尋類別: "+ category);
+		messageList.setMessagelist(title);
+		
 		BookStoreRes res = new BookStoreRes();
 		
 		Set<String>categorySetlist = new HashSet<>();
@@ -67,15 +75,19 @@ public class BookStoreServiceImpl implements BookStoreService{
 			String item = categorylist[i].trim();
 			categorySetlist.add(item);
 		}
-		List<BookStore>booksInfo = new ArrayList<>();
 		
 		for(String item : categorySetlist) {
 			res.setBooklist(bookStoredao.findByCategoryContaining(item));
 			for(BookStore book : res.getBooklist()) {
-				booksInfo.add(book);
+				messageList.messagelist.add("書籍ID:"+ book.getId());
+				messageList.messagelist.add("書名:"+ book.getName());
+				messageList.messagelist.add("分類:"+ book.getCategory());
+				messageList.messagelist.add("作者:"+ book.getWriter());
+				messageList.messagelist.add("售價:"+ book.getPrice());
+				messageList.messagelist.add("===========");
 			}
 		}
-		return booksInfo;
+		return messageList;
 	}
 
 	@Override

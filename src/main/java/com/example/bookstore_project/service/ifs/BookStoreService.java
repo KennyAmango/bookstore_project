@@ -18,7 +18,7 @@ public interface BookStoreService {
 	
 	public BookStoreRes deleteById(String id);
 	
-	public List<BookStore> findByCategory(String category);
+	public BookStoreRes findByCategory(String category);
 	
 	public List<BookRankRes> bookrank();
 	

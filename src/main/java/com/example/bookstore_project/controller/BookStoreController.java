@@ -84,15 +84,7 @@ private BookStoreRes checkreq(BookStoreReq req) {
 	
 	@PostMapping(value = "/api/findByCategory")
 	public BookStoreRes findByCategory(@RequestBody BookStoreReq req) {
-		
-		if(req.getCategory().isEmpty()) {
-			return new BookStoreRes(null,BookStoreRtnCode.CATEGORY_REQUIRED.getMessage());
-		}
-		
-		BookStoreRes res = new BookStoreRes();
-		res.setBooklist(bookstoreservice.findByCategory(req.getCategory()));
-		
-		return res;
+		return bookstoreservice.findByCategory(req.getCategory());
 	}
 	
 	@PostMapping(value = "/api/bookrank")
