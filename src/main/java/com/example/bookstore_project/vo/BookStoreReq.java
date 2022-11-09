@@ -1,14 +1,13 @@
 package com.example.bookstore_project.vo;
 
 import java.util.List;
-import java.util.Map;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class BookStoreReq {
 	
-	@JsonProperty("id")
-	private String id;
+	@JsonProperty("isbn")
+	private String isbn;
 	
 	@JsonProperty("category")
 	private String category;
@@ -33,12 +32,12 @@ public class BookStoreReq {
 	List<BookStoreReq>orderlist;
 	
 
-	public String getId() {
-		return id;
+	public String getIsbn() {
+		return isbn;
 	}
 
-	public void setId(String id) {
-		this.id = id;
+	public void setIsbn(String isbn) {
+		this.isbn = isbn;
 	}
 
 	public String getCategory() {

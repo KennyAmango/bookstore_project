@@ -9,7 +9,7 @@ public class BookRankRes {
 	
 	private String name;
 	
-	private String id;
+	private String isbn;
 	
 	private String writer;
 	
@@ -29,12 +29,12 @@ public class BookRankRes {
 		this.name = name;
 	}
 
-	public String getId() {
-		return id;
+	public String getIsbn() {
+		return isbn;
 	}
 
-	public void setId(String id) {
-		this.id = id;
+	public void setIsbn(String isbn) {
+		this.isbn = isbn;
 	}
 
 	public String getWriter() {

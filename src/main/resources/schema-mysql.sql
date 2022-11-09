@@ -1,5 +1,5 @@
 CREATE TABLE IF NOT EXISTS`bookstore1` (
-  `id` varchar(20) NOT NULL,
+  `isbn` varchar(20) NOT NULL,
   `name` varchar(20) DEFAULT NULL,
   `category` varchar(20) DEFAULT NULL,
   `storage` int DEFAULT NULL,

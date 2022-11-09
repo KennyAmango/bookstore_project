@@ -4,7 +4,12 @@ public class SerchBooksReq {
 	
 	private String code;
 	
-	private String idornameorwriter;
+	private String isbn;
+	
+	private String name;
+	
+	private String writer;
+	
 	
 	public SerchBooksReq() {
 		
@@ -18,14 +23,30 @@ public class SerchBooksReq {
 		this.code = code;
 	}
 
-	public String getIdornameorwriter() {
-		return idornameorwriter;
+	public String getIsbn() {
+		return isbn;
 	}
 
-	public void setIdornameorwriter(String idornameorwriter) {
-		this.idornameorwriter = idornameorwriter;
+	public void setIsbn(String isbn) {
+		this.isbn = isbn;
 	}
-	
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	public String getWriter() {
+		return writer;
+	}
+
+	public void setWriter(String writer) {
+		this.writer = writer;
+	}
+
 	
 
 }

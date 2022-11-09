@@ -11,8 +11,8 @@ import javax.persistence.Table;
 public class BookStore {
 	
 	@Id
-	@Column(name = "id")
-	private String id;
+	@Column(name = "isbn")
+	private String isbn;
 	
 	@Column(name = "category")
 	private String category;
@@ -36,9 +36,9 @@ public class BookStore {
 		
 	}
 	
-	public BookStore(String id, String name, String category, String writer, 
+	public BookStore(String isbn, String name, String category, String writer, 
 			int price, int storage) {
-		this.id = id;
+		this.isbn = isbn;
 		this.name = name;
 		this.category = category;
 		this.writer = writer;
@@ -47,12 +47,12 @@ public class BookStore {
 		
 	}
 
-	public String getId() {
-		return id;
+	public String getIsbn() {
+		return isbn;
 	}
 
-	public void setId(String id) {
-		this.id = id;
+	public void setIsbn(String isbn) {
+		this.isbn = isbn;
 	}
 
 	public String getCategory() {

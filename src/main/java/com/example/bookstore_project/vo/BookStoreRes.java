@@ -12,7 +12,7 @@ public class BookStoreRes {
 	@JsonProperty("book_info")
 	private BookStore bookstore;
 	
-	private String id;
+	private String isbn;
 	
 	private String category;
 
@@ -22,24 +22,24 @@ public class BookStoreRes {
 	
 	private Integer price;
 	
-	private Integer sales_volume;
+	private Integer sales;
 	
 	private Integer storage;
 	
 	private String message;
 	
     private Integer num;
+    
+    private Integer buyprice;
 	
 	private Integer totalprice;
 	
 	public BookStoreRes () {
 		
 	}
-	public List<String>messagelist;
+	private List<String>messagelist;
 	
-	public List<BookStore>booklist;
-	
-	public List<BookStoreRes>booksInfo;
+	private List<BookStore>booklist;
 	
 	public BookStoreRes(String message) {
 		this.message = message;
@@ -65,11 +65,11 @@ public class BookStoreRes {
 	public void setMessage(String message) {
 		this.message = message;
 	}
-	public String getId() {
-		return id;
+	public String getIsbn() {
+		return isbn;
 	}
-	public void setId(String id) {
-		this.id = id;
+	public void setIsbn(String isbn) {
+		this.isbn = isbn;
 	}
 	public String getCategory() {
 		return category;
@@ -95,11 +95,11 @@ public class BookStoreRes {
 	public void setPrice(Integer price) {
 		this.price = price;
 	}
-	public Integer getSales_volume() {
-		return sales_volume;
+	public Integer getSales() {
+		return sales;
 	}
-	public void setSales_volume(Integer sales_volume) {
-		this.sales_volume = sales_volume;
+	public void setSales(Integer sales) {
+		this.sales = sales;
 	}
 	public Integer getStorage() {
 		return storage;
@@ -132,20 +132,20 @@ public class BookStoreRes {
 		this.totalprice = totalprice;
 	}
 
-	public List<BookStoreRes> getBooksInfo() {
-		return booksInfo;
-	}
-
-	public void setBooksInfo(List<BookStoreRes> booksInfo) {
-		this.booksInfo = booksInfo;
-	}
-
 	public List<String> getMessagelist() {
 		return messagelist;
 	}
 
 	public void setMessagelist(List<String> messagelist) {
 		this.messagelist = messagelist;
+	}
+
+	public Integer getBuyprice() {
+		return buyprice;
+	}
+
+	public void setBuyprice(Integer buyprice) {
+		this.buyprice = buyprice;
 	}
 
 	

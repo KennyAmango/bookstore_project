@@ -4,7 +4,7 @@ public class UpdateStorageReq {
 	
 	private String code;
 	
-	private String id;
+	private String isbn;
 	
 	private int num;
 
@@ -16,12 +16,12 @@ public class UpdateStorageReq {
 		this.code = code;
 	}
 
-	public String getId() {
-		return id;
+	public String getIsbn() {
+		return isbn;
 	}
 
-	public void setId(String id) {
-		this.id = id;
+	public void setIsbn(String isbn) {
+		this.isbn = isbn;
 	}
 
 	public int getnum() {
