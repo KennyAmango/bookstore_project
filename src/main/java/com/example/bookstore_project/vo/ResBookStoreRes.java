@@ -8,10 +8,6 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class ResBookStoreRes {
 	
-	private List<BookStoreRes> orderlist;
-	
-	private List<BookStoreRes> serchlist;
-	
 	private List<BookStoreRes> booksInfo;
 	
 	private List<BookStore> booklist;
@@ -67,22 +63,6 @@ public class ResBookStoreRes {
 
 	public void setBooksInfo(List<BookStoreRes> booksInfo) {
 		this.booksInfo = booksInfo;
-	}
-
-	public List<BookStoreRes> getOrderlist() {
-		return orderlist;
-	}
-
-	public void setOrderlist(List<BookStoreRes> orderlist) {
-		this.orderlist = orderlist;
-	}
-
-	public List<BookStoreRes> getSerchlist() {
-		return serchlist;
-	}
-
-	public void setSerchlist(List<BookStoreRes> serchlist) {
-		this.serchlist = serchlist;
 	}
 	
 	public List<BookStore> getBooklist() {

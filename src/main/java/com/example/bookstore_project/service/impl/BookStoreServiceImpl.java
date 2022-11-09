@@ -47,34 +47,35 @@ public class BookStoreServiceImpl implements BookStoreService {
 	}
 	
 	private ResBookStoreRes shopGetBooks(List<BookStore> books) {
-		BookStoreRes bookInfo = new BookStoreRes();
-		List<BookStoreRes> title = new ArrayList<>();
+		
 		ResBookStoreRes booksinfo = new ResBookStoreRes();
-		booksinfo.setBooksInfo(title);
+		List<BookStoreRes> list = new ArrayList<>();
 		for (BookStore book : books) {
+			BookStoreRes bookInfo = new BookStoreRes();
 			bookInfo.setIsbn(book.getIsbn());
 			bookInfo.setName(book.getName());
 			bookInfo.setWriter(book.getWriter());
 			bookInfo.setPrice(book.getPrice());
 			bookInfo.setStorage(book.getStorage());
 			bookInfo.setSales(book.getSales());
-			booksinfo.getBooksInfo().add(bookInfo);
+			list.add(bookInfo);
 		}
+		booksinfo.setBooksInfo(list);
 		return booksinfo;
 	}
 	
 	private ResBookStoreRes cusGetBooks(List<BookStore> books) {
-		BookStoreRes bookInfo = new BookStoreRes();
-		List<BookStoreRes> title = new ArrayList<>();
+		List<BookStoreRes> list = new ArrayList<>();
 		ResBookStoreRes booksinfo = new ResBookStoreRes();
-		booksinfo.setBooksInfo(title);
 		for (BookStore book : books) {
+			BookStoreRes bookInfo = new BookStoreRes();
 			bookInfo.setIsbn(book.getIsbn());
 			bookInfo.setName(book.getName());
 			bookInfo.setWriter(book.getWriter());
 			bookInfo.setPrice(book.getPrice());
-			booksinfo.getBooksInfo().add(bookInfo);
+			list.add(bookInfo);
 		}
+		booksinfo.setBooksInfo(list);
 		return booksinfo;
 	}
 	
@@ -94,53 +95,42 @@ public class BookStoreServiceImpl implements BookStoreService {
 	@Override
 	public BookStoreRes updateByIsbn(String isbn, String name, String category, String writer, Integer price,
 			Integer storage) {
-		if (isbn == null) {
+		Optional<BookStore> bookInfo = bookStoredao.findById(isbn);
+		
+		if (!StringUtils.hasText(isbn)) {
 			return new BookStoreRes(null, BookStoreRtnCode.ISBN_REQUIRED.getMessage());
 		}
-		if (!bookStoredao.findById(isbn).isPresent()) {
+		if (!bookInfo.isPresent()) {
 			return new BookStoreRes(null, BookStoreRtnCode.NO_FOUND_ISBN.getMessage());
 		}
-		BookStore book = new BookStore();
+		BookStore book = bookInfo.get();
 
-		Optional<BookStore> bookInfo = bookStoredao.findById(isbn);
-
-		if (name == null) {
-			book.setName(bookInfo.get().getName());
-		} else {
+		if (StringUtils.hasText(name)) {
 			book.setName(name);
 		}
-		if (category == null) {
-			book.setCategory(bookInfo.get().getCategory());
-		} else {
+		if (StringUtils.hasText(category)) {
 			book.setCategory(category);
-		}
-		if (writer == null) {
-			book.setWriter(bookInfo.get().getWriter());
-		} else {
+		} 
+		if (StringUtils.hasText(writer)) {
 			book.setWriter(writer);
 		}
-		if (price == null) {
-			book.setPrice(bookInfo.get().getPrice());
-		} else {
+		if (price != null) {
 			book.setPrice(price);
-		}
-		if (storage == null) {
-			book.setStorage(bookInfo.get().getStorage());
-		} else {
+		} 
+		if (storage != null) {
 			book.setStorage(storage);
-		}
-		book.setIsbn(isbn);
-
+		} 
 		bookStoredao.save(book);
 		return new BookStoreRes(book, BookStoreRtnCode.UPDATE_SUCCESSFUL.getMessage());
 	}
 
 	@Override
 	public BookStoreRes deleteById(String isbn) {
-		if (isbn == null) {
+		if (!StringUtils.hasText(isbn)) {
 			return new BookStoreRes(null, BookStoreRtnCode.ISBN_REQUIRED.getMessage());
 		}
-		if (!bookStoredao.findById(isbn).isPresent()) {
+//		                  確認輸入的isbn存不存在
+		if (!bookStoredao.existsById(isbn)) {
 			return new BookStoreRes(BookStoreRtnCode.ISBN_REQUIRED.getMessage() + isbn);
 		}
 
@@ -154,36 +144,28 @@ public class BookStoreServiceImpl implements BookStoreService {
 		if (!StringUtils.hasText(category)) {
 			return new ResBookStoreRes(null, BookStoreRtnCode.CATEGORY_REQUIRED.getMessage());
 		}
-		
-		List<BookStoreRes> title = new ArrayList<>();
-		ResBookStoreRes booksInfo = new ResBookStoreRes();
-		booksInfo.setBooksInfo(title);
 		ResBookStoreRes res = new ResBookStoreRes();
 
-		Set<String> categorySetlist = new HashSet<>();
+		Set<String> categorySet = new HashSet<>();
 		String[] categorylist = category.split(",");
 
-		for (int i = 0; i < categorylist.length; i++) {
-			String item = categorylist[i].trim();
-			categorySetlist.add(item);
+		for(String item : categorylist) {
+			categorySet.add(item.trim());
 		}
-
-		for (String item : categorySetlist) {
-			res.setBooklist(bookStoredao.findByCategoryContaining(item));
-			if (res.getBooklist().isEmpty()) {
-				return new ResBookStoreRes(null, BookStoreRtnCode.NO_CATEGORY.getMessage() + category);
-			}
-			for (BookStore book : res.getBooklist()) {
-				BookStoreRes bookInfo = new BookStoreRes();
-				bookInfo.setIsbn(book.getIsbn());
-				bookInfo.setName(book.getName());
-				bookInfo.setCategory(book.getCategory());
-				bookInfo.setWriter(book.getWriter());
-				bookInfo.setPrice(book.getPrice());
-				booksInfo.getBooksInfo().add(bookInfo);
+		//先把資料庫所有書找出來
+		List<BookStore> books = bookStoredao.findAll();
+		
+		List<BookStore> list = new ArrayList<>();
+		for(BookStore book : books) {
+			for(String item : categorySet) {
+				//                   
+				if(book.getCategory().contains(item)) {
+					list.add(book);
+				}
 			}
 		}
-		return booksInfo;
+		res.setBooklist(list);
+		return res;
 	}
 
 	@Override
@@ -208,24 +190,16 @@ public class BookStoreServiceImpl implements BookStoreService {
 	public ResBookStoreRes buyBooks(orderBookReq orderList) {
 		
 		ResBookStoreRes resbooks = new ResBookStoreRes();
-		
 		int price;
 		int totalprice = 0;
 		List<String> message = new ArrayList<>();
-		message.add("購買訊息:");
-		List<BookStoreRes> title = new ArrayList<>();
-		BookStoreRes booksInfo = new BookStoreRes();
-		resbooks.setMessagelist(message);
-		resbooks.setOrderlist(title);
-		
+		List<BookStoreRes> list = new ArrayList<>();
 
 		for (orderBookReq entry : orderList.getOrderList()) {
 			if (!StringUtils.hasText(entry.getIsbn())) {
-				resbooks.getMessagelist()
-						.add("編號:" + entry.getIsbn() + " " + BookStoreRtnCode.ISBN_REQUIRED.getMessage());
+				message.add("編號:" + entry.getIsbn() + " " + BookStoreRtnCode.ISBN_REQUIRED.getMessage());
 			} else if (entry.getNum() == null || entry.getNum() <= 0) {
-				resbooks.getMessagelist()
-						.add("編號:" + entry.getIsbn() + " " + BookStoreRtnCode.NUM_REQUIRED.getMessage());
+				message.add("編號:" + entry.getIsbn() + " " + BookStoreRtnCode.NUM_REQUIRED.getMessage());
 			} else if (bookStoredao.findById(entry.getIsbn()).isPresent()) {
 				Optional<BookStore> book = bookStoredao.findById(entry.getIsbn());
 
@@ -242,17 +216,18 @@ public class BookStoreServiceImpl implements BookStoreService {
 					bookInfo.setPrice(bookstore.getPrice());
 					bookInfo.setNum(entry.getNum());
 					bookInfo.setBuyprice(price);
-					resbooks.getOrderlist().add(bookInfo);
+					list.add(bookInfo);
 				} else {
-					resbooks.getMessagelist().add("編號:" + entry.getIsbn() + " "
-							+ BookStoreRtnCode.STORAGE_ERRO.getMessage() + " 目前庫存:" + book.get().getStorage());
+					message.add("編號:" + entry.getIsbn() + " "
+						+ BookStoreRtnCode.STORAGE_ERRO.getMessage() + " 目前庫存:" + book.get().getStorage());
 				}
 			} else {
-				booksInfo.getMessagelist().add(BookStoreRtnCode.ISBN_REQUIRED.getMessage() + entry.getIsbn());
+				message.add(BookStoreRtnCode.ISBN_REQUIRED.getMessage() + entry.getIsbn());
 			}
 		}
 		resbooks.setTotalprice(totalprice);
-		resbooks.getMessagelist().add("購買完成,歡迎下次光臨");
+		resbooks.setBooksInfo(list);
+		resbooks.setMessagelist(message);
 		return resbooks;
 	}
 
@@ -321,27 +296,27 @@ public class BookStoreServiceImpl implements BookStoreService {
 		List<String> message = new ArrayList<>();
 		message.add("更新結果:");
 		BookStoreRes messageList = new BookStoreRes();
-		messageList.setMessagelist(message);
 
-		if (bookStoredao.findById(isbn).isPresent()) {
+		if (bookStoredao.existsById(isbn)) {
 			Optional<BookStore> book = bookStoredao.findById(isbn);
 			if (book.get().getStorage() + num < 0) {
-				messageList.getMessagelist().add(BookStoreRtnCode.STORAGE_REQUIRED.getMessage());
+				message.add(BookStoreRtnCode.STORAGE_REQUIRED.getMessage());
 				;
-				messageList.getMessagelist().add("目前庫存:" + book.get().getStorage());
+				message.add("目前庫存:" + book.get().getStorage());
 				return messageList;
 			}
-			messageList.getMessagelist().add("更新前的庫存:" + book.get().getStorage());
-			messageList.getMessagelist().add("===========");
-			messageList.getMessagelist().add("更新後:");
+			message.add("更新前的庫存:" + book.get().getStorage());
+			message.add("===========");
+			message.add("更新後:");
 			book.get().setStorage(book.get().getStorage() + num);
 			bookStoredao.save(book.get());
-			messageList.getMessagelist().add("ID:" + book.get().getIsbn());
-			messageList.getMessagelist().add("書名:" + book.get().getName());
-			messageList.getMessagelist().add("作者:" + book.get().getWriter());
-			messageList.getMessagelist().add("價格:" + book.get().getPrice());
-			messageList.getMessagelist().add("庫存:" + book.get().getStorage());
+			message.add("ID:" + book.get().getIsbn());
+			message.add("書名:" + book.get().getName());
+			message.add("作者:" + book.get().getWriter());
+			message.add("價格:" + book.get().getPrice());
+			message.add("庫存:" + book.get().getStorage());
 		}
+		messageList.setMessagelist(message);
 		return messageList;
 	}
 
@@ -359,27 +334,27 @@ public class BookStoreServiceImpl implements BookStoreService {
 		List<String> message = new ArrayList<>();
 		message.add("更新結果:");
 		BookStoreRes messageList = new BookStoreRes();
-		messageList.setMessagelist(message);
 
-		if (bookStoredao.findById(isbn).isPresent()) {
+		if (bookStoredao.existsById(isbn)) {
 			Optional<BookStore> book = bookStoredao.findById(isbn);
 			if (price < 0) {
-				messageList.getMessagelist().add(BookStoreRtnCode.PRICE_REQUIRED.getMessage());
+				message.add(BookStoreRtnCode.PRICE_REQUIRED.getMessage());
 				;
-				messageList.getMessagelist().add("目前價格:" + book.get().getPrice());
+				message.add("目前價格:" + book.get().getPrice());
 				return messageList;
 			}
-			messageList.getMessagelist().add("更新前的價格:" + book.get().getPrice());
-			messageList.getMessagelist().add("===========");
-			messageList.getMessagelist().add("更新後:");
+			message.add("更新前的價格:" + book.get().getPrice());
+			message.add("===========");
+			message.add("更新後:");
 			book.get().setPrice(price);
 			bookStoredao.save(book.get());
-			messageList.getMessagelist().add("ID:" + book.get().getIsbn());
-			messageList.getMessagelist().add("書名:" + book.get().getName());
-			messageList.getMessagelist().add("作者:" + book.get().getWriter());
-			messageList.getMessagelist().add("價格:" + book.get().getPrice());
-			messageList.getMessagelist().add("庫存:" + book.get().getStorage());
+			message.add("ID:" + book.get().getIsbn());
+			message.add("書名:" + book.get().getName());
+			message.add("作者:" + book.get().getWriter());
+			message.add("價格:" + book.get().getPrice());
+			message.add("庫存:" + book.get().getStorage());
 		}
+		messageList.setMessagelist(message);
 		return messageList;
 	}
 }
