@@ -5,46 +5,44 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
-
 @Entity
 @Table(name = "bookstore")
 public class BookStore {
-	
+
 	@Id
 	@Column(name = "isbn")
 	private String isbn;
-	
+
 	@Column(name = "category")
 	private String category;
-	
+
 	@Column(name = "writer")
 	private String writer;
-	
+
 	@Column(name = "name")
 	private String name;
-	
+
 	@Column(name = "price")
 	private int price;
-	
+
 	@Column(name = "sales_volume")
 	private int sales;
-	
+
 	@Column(name = "storage")
 	private int storage;
-	
+
 	public BookStore() {
-		
+
 	}
-	
-	public BookStore(String isbn, String name, String category, String writer, 
-			int price, int storage) {
+
+	public BookStore(String isbn, String name, String category, String writer, int price, int storage) {
 		this.isbn = isbn;
 		this.name = name;
 		this.category = category;
 		this.writer = writer;
 		this.price = price;
 		this.storage = storage;
-		
+
 	}
 
 	public String getIsbn() {

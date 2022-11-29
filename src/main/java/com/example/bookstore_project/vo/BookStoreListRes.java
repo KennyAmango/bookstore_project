@@ -1,38 +1,45 @@
 package com.example.bookstore_project.vo;
 
 import java.util.List;
+import java.util.Set;
 
 import com.example.bookstore_project.entity.BookStore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class ResBookStoreRes {
-	
+public class BookStoreListRes {
+
 	private List<BookStoreRes> booksInfo;
-	
+
+	private Set<BookStore> bookSet;
+
 	private List<BookStore> booklist;
-	
-    private Integer buyprice;
-	
+
 	private Integer totalprice;
-	
+
 	private String message;
-	
-	private BookStore bookstore;
+
+	private BookStoreRes bookstore;
 
 	private BookStoreRes bookstoreres;
-	
+
 	List<String> messagelist;
-	
-	public ResBookStoreRes() {
-		
+
+	Set<String> messageSet;
+
+	public BookStoreListRes() {
+
 	}
-	
-	public ResBookStoreRes(BookStore bookstore,String message) {
-		this.bookstore = bookstore;
+
+	public BookStoreListRes(String message) {
 		this.message = message;
 	}
-	
+
+	public BookStoreListRes(BookStoreRes bookstoreres, String message) {
+		this.bookstoreres = bookstore;
+		this.message = message;
+	}
+
 	public String getMessage() {
 		return message;
 	}
@@ -44,7 +51,7 @@ public class ResBookStoreRes {
 	public BookStoreRes getBookstoreres() {
 		return bookstoreres;
 	}
-	
+
 	public List<String> getMessagelist() {
 		return messagelist;
 	}
@@ -57,6 +64,14 @@ public class ResBookStoreRes {
 		this.bookstoreres = bookstoreres;
 	}
 
+	public Set<BookStore> getBookSet() {
+		return bookSet;
+	}
+
+	public void setBookSet(Set<BookStore> bookSet) {
+		this.bookSet = bookSet;
+	}
+
 	public List<BookStoreRes> getBooksInfo() {
 		return booksInfo;
 	}
@@ -64,29 +79,13 @@ public class ResBookStoreRes {
 	public void setBooksInfo(List<BookStoreRes> booksInfo) {
 		this.booksInfo = booksInfo;
 	}
-	
+
 	public List<BookStore> getBooklist() {
 		return booklist;
 	}
 
 	public void setBooklist(List<BookStore> booklist) {
 		this.booklist = booklist;
-	}
-
-	public BookStore getBookstore() {
-		return bookstore;
-	}
-
-	public void setBookstore(BookStore bookstore) {
-		this.bookstore = bookstore;
-	}
-
-	public Integer getBuyprice() {
-		return buyprice;
-	}
-
-	public void setBuyprice(Integer buyprice) {
-		this.buyprice = buyprice;
 	}
 
 	public Integer getTotalprice() {
@@ -96,7 +95,21 @@ public class ResBookStoreRes {
 	public void setTotalprice(Integer totalprice) {
 		this.totalprice = totalprice;
 	}
-	
-	
+
+	public BookStoreRes getBookstore() {
+		return bookstore;
+	}
+
+	public void setBookstore(BookStoreRes bookstore) {
+		this.bookstore = bookstore;
+	}
+
+	public Set<String> getMessageSet() {
+		return messageSet;
+	}
+
+	public void setMessageSet(Set<String> messageSet) {
+		this.messageSet = messageSet;
+	}
 
 }
